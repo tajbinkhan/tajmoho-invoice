@@ -7,7 +7,7 @@ import {
 	Img,
 	Preview,
 	Section,
-	Text,
+	Text
 } from "@react-email/components";
 
 interface VerificationEmailProps {
@@ -19,7 +19,7 @@ interface VerificationEmailProps {
 export const VerificationEmail = ({
 	userName,
 	resetPasswordLink,
-	previewText,
+	previewText
 }: VerificationEmailProps) => {
 	return (
 		<Html>
@@ -29,11 +29,11 @@ export const VerificationEmail = ({
 				<Container style={container}>
 					<Img
 						src={
-							"https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+							"https://firebasestorage.googleapis.com/v0/b/tajmoho-invoice.appspot.com/o/Email-Contents%2Flogo.png?alt=media&token=0075f3d2-1373-4924-a4bf-7ea88f299726"
 						}
-						width="40"
-						height="33"
-						alt="Tailwind"
+						width="170"
+						height="50"
+						alt="Tajmoho International"
 					/>
 					<Section>
 						<Text style={text}>Hi {userName},</Text>
@@ -49,8 +49,8 @@ export const VerificationEmail = ({
 							delete this message.
 						</Text>
 						<Text style={text}>
-							To keep your account secure, please don&apos;t forward this email
-							to anyone.
+							To keep your account secure, please don&apos;t forward this email to
+							anyone.
 						</Text>
 					</Section>
 				</Container>
@@ -63,13 +63,13 @@ export default VerificationEmail;
 
 const main = {
 	backgroundColor: "#f6f9fc",
-	padding: "10px 0",
+	padding: "10px 0"
 };
 
 const container = {
 	backgroundColor: "#ffffff",
 	border: "1px solid #f0f0f0",
-	padding: "45px",
+	padding: "45px"
 };
 
 const text = {
@@ -78,7 +78,7 @@ const text = {
 		"'Open Sans', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
 	fontWeight: "300",
 	color: "#404040",
-	lineHeight: "26px",
+	lineHeight: "26px"
 };
 
 const button = {
@@ -91,9 +91,9 @@ const button = {
 	textAlign: "center" as const,
 	display: "block",
 	width: "210px",
-	padding: "14px 7px",
+	padding: "14px 7px"
 };
 
 const anchor = {
-	textDecoration: "underline",
+	textDecoration: "underline"
 };

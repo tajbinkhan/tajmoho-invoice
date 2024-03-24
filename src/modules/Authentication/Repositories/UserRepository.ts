@@ -278,6 +278,10 @@ export default class UserRepository extends PrismaBaseRepository {
 			throwIf(!checkPassword, "Old password is incorrect");
 
 			const hashPassword = await bcrypt.hash(data.newPassword, 10);
+
+			const compareNewPassword = await bcrypt.compare(data.oldPassword, hashPassword);
+			throwIf(compareNewPassword, "New password can not be same as old password");
+
 			const updateUser = await this.clientModel.update({
 				where: { id },
 				data: { password: hashPassword }

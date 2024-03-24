@@ -1,5 +1,5 @@
-import ClientsPageView from "@/components/templates/Dashboard/Clients/ClientsPageView";
 import { siteTitle } from "@/core/Helpers";
+import ClientsTemplateView from "@/modules/Clients/Templates/ClientsTemplateView";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function DashboardClient() {
-	return <ClientsPageView />;
+	return <ClientsTemplateView />;
 }

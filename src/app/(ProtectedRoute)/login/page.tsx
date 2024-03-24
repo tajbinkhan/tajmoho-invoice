@@ -1,5 +1,5 @@
-import LoginPageView from "@/components/templates/Login/LoginPageView";
 import { siteTitle } from "@/core/Helpers";
+import { LoginTemplateView } from "@/modules/Authentication/Templates/Login/LoginTemplateView";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function Login() {
-	return <LoginPageView />;
+	return <LoginTemplateView />;
 }

@@ -1,5 +1,5 @@
-import SettingsPageView from "@/components/templates/Dashboard/SettingsPageView";
 import { siteTitle } from "@/core/Helpers";
+import SettingsTemplateView from "@/modules/Settings/Templates/SettingsTemplateView";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function DashboardSetting() {
-	return <SettingsPageView />;
+	return <SettingsTemplateView />;
 }

@@ -1,5 +1,5 @@
-import ProfilePageView from "@/components/templates/Dashboard/ProfilePageView";
 import { siteTitle } from "@/core/Helpers";
+import ProfileTemplateView from "@/modules/Profile/Templates/ProfileTemplateView";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function DashboardProfile() {
-	return <ProfilePageView />;
+	return <ProfileTemplateView />;
 }

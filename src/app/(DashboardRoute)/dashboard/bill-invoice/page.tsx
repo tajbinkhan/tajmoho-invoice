@@ -1,5 +1,5 @@
-import BillInvoicePageView from "@/components/templates/Dashboard/BillInvoice/BillInvoicePageView";
 import { siteTitle } from "@/core/Helpers";
+import BillInvoiceTemplateView from "@/modules/BillInvoice/Templates/BillInvoiceTemplateView";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function DashboardBillInvoice() {
-	return <BillInvoicePageView />;
+	return <BillInvoiceTemplateView />;
 }

@@ -41,5 +41,4 @@ export const ProformaInvoiceServerSchema = ProformaInvoiceSchema.omit({
 });
 
 export type ProformaInvoiceSchemaType = z.infer<typeof ProformaInvoiceSchema>;
-
 export type ProformaInvoiceServerSchemaType = z.infer<typeof ProformaInvoiceServerSchema>;

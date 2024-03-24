@@ -1,5 +1,5 @@
-import DashboardPageView from "@/components/templates/Dashboard/DashboardPageView";
 import { siteTitle } from "@/core/Helpers";
+import DashboardTemplateView from "@/modules/Dashboard/Templates/DashboardTemplateView";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function Dashboard() {
-	return <DashboardPageView />;
+	return <DashboardTemplateView />;
 }

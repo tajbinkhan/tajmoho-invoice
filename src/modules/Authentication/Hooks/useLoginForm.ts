@@ -19,6 +19,7 @@ export function useLoginForm() {
 		}
 	});
 
+	const isFormSubmitting = form.formState.isSubmitting;
 	const searchParams = useSearchParams();
 	const loginErrors = searchParams.get("error");
 	const getCallbackUrl = searchParams.get("callbackUrl");
@@ -81,6 +82,7 @@ export function useLoginForm() {
 
 	return {
 		form,
+		isFormSubmitting,
 		onSubmit
 	};
 }

@@ -1,5 +1,5 @@
-import ProformaInvoicePageView from "@/components/templates/Dashboard/ProformaInvoice/ProformaInvoicePageView";
 import { siteTitle } from "@/core/Helpers";
+import ProformaInvoiceTemplateView from "@/modules/ProformaInvoice/Templates/ProformaInvoiceTemplateView";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function DashboardProformaInvoice() {
-	return <ProformaInvoicePageView />;
+	return <ProformaInvoiceTemplateView />;
 }

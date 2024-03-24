@@ -10,7 +10,8 @@ const dashboardPrefix = "/dashboard";
 export const route = {
 	public: {
 		home: "/",
-		login: "/login"
+		login: "/login",
+		passwordReset: "/password-reset"
 	},
 	dashboardRoute: {
 		home: `${dashboardPrefix}`,
@@ -26,6 +27,7 @@ export const route = {
 	apiRoute: {
 		checkDBConnection: `${apiRoutePrefix}/db-connection`,
 		accountVerification: `${apiRoutePrefix}/auth/account-verification`,
+		profile: `${apiRoutePrefix}/auth/profile`,
 		passwordChange: `${apiRoutePrefix}/auth/password-change`,
 		passwordReset: `${apiRoutePrefix}/auth/password-reset`,
 		passwordResetDone: `${apiRoutePrefix}/auth/password-reset/done`,

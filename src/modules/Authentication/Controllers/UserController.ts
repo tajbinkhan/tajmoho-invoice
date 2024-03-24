@@ -202,9 +202,11 @@ export default class UserController extends ApiController implements ApiCrudCont
 		} catch (error: any) {
 			if (error.message === "Unauthorized Access") {
 				return ApiResponse.unauthorized("Unauthorized Access");
-			} else if (error === "Old password is incorrect") {
+			} else if (error.message === "Old password is incorrect") {
 				return ApiResponse.badRequest("Old password is incorrect");
-			} else if (error === "User not found") {
+			} else if (error.message === "New password can not be same as old password") {
+				return ApiResponse.badRequest("New password can not be same as old password");
+			} else if (error.message === "User not found") {
 				return ApiResponse.notFound("User not found");
 			} else if (error instanceof z.ZodError) {
 				return ApiResponse.badRequest(error.errors.map(e => e.message).join(", "));
