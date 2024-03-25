@@ -1,6 +1,7 @@
 "use client";
 
 import PasswordVisibilityToggle from "@/components/common/PasswordVisibilityToggle";
+import { Button } from "@/components/ui/button";
 import {
 	Form,
 	FormControl,
@@ -10,8 +11,11 @@ import {
 	FormMessage
 } from "@/components/ui/form";
 import { LoadingButton } from "@/components/ui/loading-button";
+import { callbackUrlFn } from "@/core/Helpers";
 import { usePasswordResetTokenForm } from "@/modules/Authentication/Hooks/usePasswordResetTokenForm";
 import { FormHeading } from "@/modules/Authentication/Templates/FromHeader/FormHeading";
+import { route } from "@/routes/routes";
+import Link from "next/link";
 
 export default function PasswordResetTokenTemplateView({
 	token,
@@ -65,15 +69,22 @@ export default function PasswordResetTokenTemplateView({
 						/>
 
 						<LoadingButton
-							text="Login"
-							variant="default"
-							variantLoading="loading"
+							text="Reset Password"
 							loadingText="Please wait..."
 							className="w-full"
 							isLoading={isFormSubmitting}
 						/>
 					</form>
 				</Form>
+
+				<div className="mt-8 text-center">
+					<p className="text-sm text-gray-600">
+						Remembered your password?{" "}
+						<Button asChild variant={"link"} className="p-0">
+							<Link href={callbackUrlFn(route.public.login)}>Login</Link>
+						</Button>
+					</p>
+				</div>
 			</div>
 		</div>
 	);

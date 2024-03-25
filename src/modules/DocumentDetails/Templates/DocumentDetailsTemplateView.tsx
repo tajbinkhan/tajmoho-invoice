@@ -28,24 +28,28 @@ export default function DocumentDetailsTemplateView() {
 					<CardDescription>Here you can view all the document details.</CardDescription>
 					<Separator />
 				</CardHeader>
-				<CardContent className="flex flex-col gap-6">
-					<div className="flex flex-col gap-3">
-						<h2 className="text-xl font-semibold tracking-tight">
-							Beneficiary Details
-						</h2>
-						<p className="leading-7">{data?.data?.beneficiaryDetails}</p>
-					</div>
-					<div className="flex flex-col gap-3">
-						<h2 className="text-xl font-semibold tracking-tight">Terms & Conditions</h2>
-						<div className="pl-4 leading-7" id="termsAndConditions">
-							{data?.data && parse(data?.data?.termsAndConditions)}
+				{data?.data && (
+					<CardContent className="flex flex-col gap-6">
+						<div className="flex flex-col gap-3">
+							<h2 className="text-xl font-semibold tracking-tight">
+								Beneficiary Details
+							</h2>
+							<p className="leading-7">{data?.data?.beneficiaryDetails}</p>
 						</div>
-					</div>
-				</CardContent>
+						<div className="flex flex-col gap-3">
+							<h2 className="text-xl font-semibold tracking-tight">
+								Terms & Conditions
+							</h2>
+							<div id="termsAndConditions">
+								{data?.data && parse(data?.data?.termsAndConditions)}
+							</div>
+						</div>
+					</CardContent>
+				)}
 				<CardFooter>
 					<Button asChild>
 						<Link href={route.dashboardRoute.documentDetailsUpdate}>
-							Update Document Details
+							{data?.data ? "Update Document Details" : "Add Document Details"}
 						</Link>
 					</Button>
 				</CardFooter>

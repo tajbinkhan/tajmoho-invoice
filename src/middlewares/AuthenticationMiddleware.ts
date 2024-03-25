@@ -1,4 +1,5 @@
 import { authOptions } from "@/core/Auth";
+import { errors } from "@/core/Errors";
 import { throwIf } from "@/core/Helpers";
 import JwtService from "@/core/JWTService";
 import { prisma } from "@/database/adapters/Prisma/PrismaClientAdapter";
@@ -12,7 +13,7 @@ export async function withAuthUser() {
 	try {
 		return await getTokenInfo();
 	} catch (e: any) {
-		throwIf(e, "Unauthorized Access");
+		throwIf(e, errors.unauthorized);
 	}
 }
 
@@ -27,7 +28,7 @@ async function getTokenInfo() {
 			console.log(`authAccessToken not found - creating a new one`);
 
 			const findUserByEmail: any = await userRepository.findByEmail(sessionUserEmail);
-			throwIf(!findUserByEmail, "User not found");
+			throwIf(!findUserByEmail, errors.userNotFound);
 
 			// TODO: find the account info
 			const userAccount: any = await prisma.account.findFirst({
@@ -36,7 +37,7 @@ async function getTokenInfo() {
 				}
 			});
 
-			throwIf(!userAccount, "Invalid account Id");
+			throwIf(!userAccount, errors.invalidUserAccountId);
 
 			// TODO: Generate JWT token using user information
 			const userJwtData = {
@@ -68,7 +69,7 @@ async function getTokenInfo() {
 			};
 		}
 	} catch (error: any) {
-		throw new Error("Invalid token");
+		throwIf(error, errors.invalidToken);
 	}
 }
 
@@ -87,7 +88,7 @@ async function getUserFromAccessToken(authAccessToken: string) {
 	const findUserByEmail = await userRepository.findByEmail(authUser.email);
 
 	if (!findUserByEmail) {
-		throw new Error("User not found");
+		throwIf(!findUserByEmail, errors.userNotFound);
 	}
 
 	return {

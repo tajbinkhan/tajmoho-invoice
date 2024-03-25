@@ -63,8 +63,17 @@
 	@apply pl-4;
 }
 
+#termsAndConditions > ol,
+#termsAndConditions > ul {
+	@apply pl-4 leading-7;
+}
+
 #termsAndConditions > ol {
 	@apply list-decimal;
+}
+
+#termsAndConditions > ul {
+	@apply list-disc;
 }
 
 .ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred,

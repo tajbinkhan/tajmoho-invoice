@@ -1,6 +1,8 @@
+import { errors } from "@/core/Errors";
 import { throwIf } from "@/core/Helpers";
 import JwtService from "@/core/JWTService";
 import PrismaBaseRepository from "@/database/adapters/Prisma/PrismaBaseRepository";
+import { PasswordChangeSchemaType } from "@/validators/PasswordChange.schema";
 import { PrismaClient, User } from "@prisma/client";
 import bcrypt, { compare } from "bcryptjs";
 
@@ -13,7 +15,7 @@ export default class UserRepository extends PrismaBaseRepository {
 	protected modelName: any | string;
 	protected accountModelName: any | string;
 	protected clientModel: PrismaClient["user"];
-	protected accountModel: any;
+	protected accountModel: PrismaClient["account"];
 
 	/**
 	 * Initializes a new instance of the UserRepository class.
@@ -21,21 +23,15 @@ export default class UserRepository extends PrismaBaseRepository {
 	constructor() {
 		super();
 		this.modelName = "user"; // In Prisma, the model name is usually singular.
-		this.accountModelName = "account";
-		this.accountModel = this.client[this.accountModelName];
+		this.accountModelName = "account"; // In Prisma, the model name is usually singular.
+		this.accountModel = this.client[this.accountModelName] as any;
 		this.clientModel = this.client[this.modelName] as any;
 	}
 
-	/**
-	 * Creates a new user record in the database.
-	 *
-	 * @param data - Object containing the user's data.
-	 * @returns The newly created user record.
-	 */
 	async create(data: UserCreateInterface): Promise<User> {
 		try {
 			const findUser = await this.findByEmail(data.email);
-			throwIf(findUser, "User already exists");
+			throwIf(findUser, errors.userAlreadyExists);
 
 			const createUser = await this.clientModel.create({
 				data
@@ -47,12 +43,6 @@ export default class UserRepository extends PrismaBaseRepository {
 		}
 	}
 
-	/**
-	 * Retrieves a user record by its unique identifier.
-	 *
-	 * @param id - Unique identifier of the user to retrieve.
-	 * @returns The user record if found, otherwise null.
-	 */
 	async retrieve(id: string): Promise<User | null> {
 		try {
 			const user = await this.clientModel.findUnique({
@@ -65,14 +55,6 @@ export default class UserRepository extends PrismaBaseRepository {
 		}
 	}
 
-	/**
-	 * Updates a user record identified by its unique identifier with new data.
-	 *
-	 * @param id - Unique identifier of the user to update.
-	 * @param data - Object containing the new data for the user.
-	 * @param query - Optional query parameters (not used in this simple implementation).
-	 * @returns The updated user record.
-	 */
 	async update(id: string, data: UserUpdateInterface): Promise<User> {
 		try {
 			const updateUser = await this.clientModel.update({
@@ -85,13 +67,6 @@ export default class UserRepository extends PrismaBaseRepository {
 		}
 	}
 
-	/**
-	 * Deletes a user record from the database by its unique identifier.
-	 *
-	 * @param id - Unique identifier of the user to delete.
-	 * @param query - Optional query parameters (not used in this simple implementation).
-	 * @returns The deleted user record.
-	 */
 	async delete(id: string): Promise<User> {
 		try {
 			const deleteUser = await this.clientModel.delete({
@@ -139,13 +114,6 @@ export default class UserRepository extends PrismaBaseRepository {
 		}
 	}
 
-	/**
-	 * Finds a user record by its unique identifier.
-	 * This method is similar to 'read' and can be used interchangeably.
-	 *
-	 * @param id - Unique identifier of the user to find.
-	 * @returns The user record if found, otherwise null.
-	 */
 	async findById(id: string): Promise<User | null> {
 		try {
 			const user = await this.retrieve(id);
@@ -171,12 +139,12 @@ export default class UserRepository extends PrismaBaseRepository {
 	async checkVerification(email: string): Promise<boolean> {
 		try {
 			const checkEmail = await this.findByEmail(email);
-			throwIf(!checkEmail, "User not found");
+			throwIf(!checkEmail, errors.userNotFound);
 			const checkVerification = await this.clientModel.findUnique({
 				where: { email },
 				select: { userVerified: true }
 			});
-			throwIf(!checkVerification?.userVerified, "User is not verified");
+			throwIf(!checkVerification?.userVerified, errors.userIsNotVerified);
 			return Promise.resolve(checkVerification!.userVerified as boolean);
 		} catch (error: any) {
 			return Promise.reject(error);
@@ -196,13 +164,11 @@ export default class UserRepository extends PrismaBaseRepository {
 				});
 
 				const accountUserId = account?.userId;
-				throwIf(!accountUserId, "Invalid userId found in Account");
+				throwIf(!accountUserId, errors.invalidUserAccountId);
 
-				// TODO: Find the user using id or throw exception
 				const user: any = await this.findById(accountUserId);
-				throwIf(!user, "Invalid user found");
+				throwIf(!user, errors.invalidUser);
 
-				// TODO: Generate JWT token using user information
 				const userJwtData = {
 					id: user.id,
 					name: user.name,
@@ -216,20 +182,13 @@ export default class UserRepository extends PrismaBaseRepository {
 
 				return Promise.resolve(userToken);
 			} else {
-				// TODO: Find the user using email address or throw exception
 				const user: any = await this.findByEmail(credentials.email);
 
-				// TODO: find the user password if not provided in the request
-				// TODO: find the user password from the co
-
-				throwIf(!user?.id || !user?.password, "Invalid user credentials");
-
-				// TODO: verify the user password or throw exception
+				throwIf(!user?.id || !user?.password, errors.invalidUserCredentials);
 				const passwordVerified = await compare(credentials.password, user.password!);
 
-				throwIf(!passwordVerified, "Invalid user credentials.");
+				throwIf(!passwordVerified, errors.invalidUserCredentials);
 
-				// TODO: Generate JWT token using user information
 				const userJwtData = {
 					id: user.id,
 					name: user.name,
@@ -269,18 +228,18 @@ export default class UserRepository extends PrismaBaseRepository {
 		}
 	}
 
-	async changePassword(id: string, data: ChangePasswordInterface): Promise<User> {
+	async changePassword(id: string, data: PasswordChangeSchemaType): Promise<User> {
 		try {
 			const findUser = await this.retrieve(id);
-			throwIf(!findUser, "User not found");
+			throwIf(!findUser, errors.userNotFound);
 
 			const checkPassword = await bcrypt.compare(data.oldPassword, findUser?.password!);
-			throwIf(!checkPassword, "Old password is incorrect");
+			throwIf(!checkPassword, errors.oldPasswordNotMatch);
 
 			const hashPassword = await bcrypt.hash(data.newPassword, 10);
 
 			const compareNewPassword = await bcrypt.compare(data.oldPassword, hashPassword);
-			throwIf(compareNewPassword, "New password can not be same as old password");
+			throwIf(compareNewPassword, errors.newPasswordCannotBeSame);
 
 			const updateUser = await this.clientModel.update({
 				where: { id },
@@ -297,7 +256,7 @@ export default class UserRepository extends PrismaBaseRepository {
 		try {
 			const findUser = await this.findByEmail(email);
 			if (!findUser) {
-				return Promise.reject("User not found");
+				return Promise.reject(errors.userNotFound);
 			}
 
 			const hashPassword = await bcrypt.hash(password, 10);
@@ -316,7 +275,7 @@ export default class UserRepository extends PrismaBaseRepository {
 		try {
 			const findUser = await this.findByEmail(email);
 			if (!findUser) {
-				return Promise.reject("User not found");
+				return Promise.reject(errors.userNotFound);
 			}
 
 			const updateUser = await this.clientModel.update({

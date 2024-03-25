@@ -1,5 +1,7 @@
 "use client";
 
+import { errors } from "@/core/Errors";
+import { successes } from "@/core/Successes";
 import { route } from "@/routes/routes";
 import { LoginSchema, LoginSchemaType } from "@/validators/Login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,13 +30,13 @@ export function useLoginForm() {
 	const getErrors = useCallback(() => {
 		if (loginErrors) {
 			if (loginErrors === "OAuthAccountNotLinked" || loginErrors === "EmailCreateAccount") {
-				toast.error("Email is already associated with an account");
+				toast.error(errors.emailIsAlreadyAssociated);
 			} else if (loginErrors === "OAuthSignin") {
-				toast.error("Error signing in");
+				toast.error(errors.signInError);
 			} else if (loginErrors === "OAuthCallback") {
-				toast.error("Error in handling the response from the OAuth provider");
+				toast.error(errors.oauthProviderError);
 			} else if (loginErrors === "OAuthCreateAccount") {
-				toast.error("Error in creating the account");
+				toast.error(errors.accountCreationError);
 			}
 		} else {
 			return null;
@@ -59,10 +61,10 @@ export function useLoginForm() {
 						callbackUrl
 					});
 					if (details?.error === "CredentialsSignin") {
-						toast.error("Email or password is incorrect");
-						// form.setValue("password", "");
+						toast.error(errors.invalidUserCredentials);
+						form.setValue("password", "");
 					} else {
-						toast.success("Signed in successfully");
+						toast.success(successes.signInSuccess);
 						form.reset();
 					}
 				}
@@ -70,12 +72,12 @@ export function useLoginForm() {
 			.catch(err => {
 				try {
 					if (err.response.status === 404) {
-						toast.error("Account not found");
+						toast.error(errors.userNotFound);
 					} else {
-						toast.error("Account is not verified");
+						toast.error(errors.userIsNotVerified);
 					}
 				} catch (error) {
-					toast.error("Error signing in");
+					toast.error(errors.signInError);
 				}
 			});
 	};

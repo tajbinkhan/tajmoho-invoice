@@ -1,3 +1,4 @@
+import { errors } from "@/core/Errors";
 import PrismaBaseRepository from "@/database/adapters/Prisma/PrismaBaseRepository";
 import UserRepository from "@/modules/Authentication/Repositories/UserRepository";
 import { PrismaClient, TokenType, User } from "@prisma/client";
@@ -68,7 +69,7 @@ export default class TokenRepository extends PrismaBaseRepository {
 			});
 
 			if (!passwordResetToken) {
-				return Promise.reject("Invalid token");
+				return Promise.reject(errors.invalidToken);
 			}
 
 			const email = passwordResetToken.identifier;
@@ -99,7 +100,7 @@ export default class TokenRepository extends PrismaBaseRepository {
 			});
 
 			if (!userVerificationToken) {
-				return Promise.reject("Invalid token");
+				return Promise.reject(errors.invalidToken);
 			}
 
 			const updateUserVerificationStatus = await this.userModel.verifyUserAccount(

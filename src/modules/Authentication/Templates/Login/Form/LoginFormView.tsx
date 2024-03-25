@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/components/ui/loading-button";
+import { callbackUrlFn } from "@/core/Helpers";
 import { useLoginForm } from "@/modules/Authentication/Hooks/useLoginForm";
 import { route } from "@/routes/routes";
 import Link from "next/link";
@@ -54,7 +55,7 @@ export default function LoginFormView() {
 									/>
 									<div className="float-end">
 										<Link
-											href={route.public.passwordReset}
+											href={callbackUrlFn(route.public.passwordReset)}
 											className="text-sm text-blue-600"
 										>
 											Forgot password?

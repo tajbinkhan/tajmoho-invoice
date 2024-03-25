@@ -1,5 +1,6 @@
 "use client";
 
+import { callbackUrlFn } from "@/core/Helpers";
 import { route } from "@/routes/routes";
 import { PasswordResetSchema, PasswordResetSchemaType } from "@/validators/PasswordReset.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,7 +26,7 @@ export default function usePasswordResetForm() {
 				.post(`${route.apiRoute.passwordReset}`, data)
 				.then(res => {
 					toast.success(res.data.message);
-					router.push(route.public.login);
+					router.push(callbackUrlFn(route.public.login));
 				})
 				.catch(err => {
 					try {

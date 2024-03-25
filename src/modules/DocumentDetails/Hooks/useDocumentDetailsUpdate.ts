@@ -57,7 +57,7 @@ export default function useDocumentDetailsUpdate() {
 	};
 
 	const onSubmit = async (data: DocumentDetailsSchemaType) => {
-		if (documentDetailData.data.id) {
+		if (documentDetailData?.data?.id) {
 			await putSubmission(documentDetailData.data.id, data);
 		} else {
 			await postSubmission(data);

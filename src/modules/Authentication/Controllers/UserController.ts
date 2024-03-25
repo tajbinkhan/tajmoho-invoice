@@ -1,5 +1,7 @@
 import { ApiController, ApiCrudController } from "@/core/ApiController";
 import ApiResponse from "@/core/ApiResponse";
+import { errors } from "@/core/Errors";
+import { successes } from "@/core/Successes";
 import { withAuthUser } from "@/middlewares/AuthenticationMiddleware";
 import UserCreateAction from "@/modules/Authentication/Actions/UserAction";
 import UserRepository from "@/modules/Authentication/Repositories/UserRepository";
@@ -8,7 +10,7 @@ import VerificationEmail from "@/modules/Authentication/SubModules/Token/Accesso
 import TokenEmailService from "@/modules/Authentication/SubModules/Token/Accessories/Email/TokenEmail";
 import TokenRepository from "@/modules/Authentication/SubModules/Token/Repositories/TokenRepository";
 import { EmailVerificationSchema } from "@/validators/EmailVerification.schema";
-import { PasswordChangeSchema } from "@/validators/PasswordChange.schema";
+import { PasswordChangeSchema, PasswordChangeSchemaType } from "@/validators/PasswordChange.schema";
 import { TokenType } from "@prisma/client";
 import { PrismaClientValidationError } from "@prisma/client/runtime/library";
 import { NextRequest, NextResponse } from "next/server";
@@ -36,9 +38,9 @@ export default class UserController extends ApiController implements ApiCrudCont
 		try {
 			const users = await this.usersRepo.retrieveAll();
 
-			return ApiResponse.success("All users retrieved successfully", users);
+			return ApiResponse.success(successes.allDataRetrieved, users);
 		} catch (error: any) {
-			return ApiResponse.error(error.message, error);
+			return ApiResponse.error(errors.internalServerError, error);
 		}
 	}
 
@@ -49,9 +51,9 @@ export default class UserController extends ApiController implements ApiCrudCont
 			const executeData = new UserCreateAction();
 			const createData = await executeData.execute(body);
 
-			return ApiResponse.created("User created successfully", createData);
+			return ApiResponse.created(successes.dataCreated, createData);
 		} catch (error: any) {
-			return ApiResponse.error(error.message, error);
+			return ApiResponse.error(errors.internalServerError, error);
 		}
 	}
 
@@ -59,9 +61,9 @@ export default class UserController extends ApiController implements ApiCrudCont
 		try {
 			const retrieveData = await this.usersRepo.retrieve(id);
 
-			return ApiResponse.success("User retrieved successfully", retrieveData);
+			return ApiResponse.success(successes.dataRetrieved, retrieveData);
 		} catch (error: any) {
-			return ApiResponse.error(error.message, error);
+			return ApiResponse.error(errors.internalServerError, error);
 		}
 	}
 
@@ -71,9 +73,9 @@ export default class UserController extends ApiController implements ApiCrudCont
 
 			const updateData = await this.usersRepo.update(id, body);
 
-			return ApiResponse.success("User updated successfully", updateData);
+			return ApiResponse.success(successes.dateUpdated, updateData);
 		} catch (error: any) {
-			return ApiResponse.error(error.message, error);
+			return ApiResponse.error(errors.internalServerError, error);
 		}
 	}
 
@@ -81,9 +83,9 @@ export default class UserController extends ApiController implements ApiCrudCont
 		try {
 			await this.usersRepo.delete(id);
 
-			return ApiResponse.success("User deleted successfully");
+			return ApiResponse.success(successes.dataDeleted);
 		} catch (error: any) {
-			return ApiResponse.error(error.message, error);
+			return ApiResponse.error(errors.internalServerError, error);
 		}
 	}
 
@@ -91,9 +93,9 @@ export default class UserController extends ApiController implements ApiCrudCont
 		try {
 			const deleteData = await this.usersRepo.deleteAll();
 
-			return ApiResponse.success("All users deleted successfully", deleteData);
+			return ApiResponse.success(successes.allDataDeleted, deleteData);
 		} catch (error: any) {
-			return ApiResponse.error(error.message, error);
+			return ApiResponse.error(errors.internalServerError, error);
 		}
 	}
 
@@ -105,9 +107,9 @@ export default class UserController extends ApiController implements ApiCrudCont
 				accessToken: tokenData
 			};
 
-			return ApiResponse.success("Token authenticated successfully", data);
+			return ApiResponse.success(successes.tokenAuthenticated, data);
 		} catch (error: any) {
-			return ApiResponse.error(error.message, error);
+			return ApiResponse.error(errors.internalServerError, error);
 		}
 	}
 
@@ -117,14 +119,14 @@ export default class UserController extends ApiController implements ApiCrudCont
 
 			const verifyData = await this.usersRepo.checkVerification(body.email);
 
-			return ApiResponse.success("Account is verified", verifyData);
+			return ApiResponse.success(successes.accountVerified, verifyData);
 		} catch (error: any) {
-			if (error.message === "User not found") {
-				return ApiResponse.notFound("User not found");
-			} else if (error.message === "User is not verified") {
-				return ApiResponse.badRequest("User is not verified");
+			if (error.message === errors.userNotFound) {
+				return ApiResponse.notFound(errors.userNotFound);
+			} else if (error.message === errors.userIsNotVerified) {
+				return ApiResponse.badRequest(errors.userIsNotVerified);
 			}
-			return ApiResponse.error(error.message, error);
+			return ApiResponse.error(errors.internalServerError, error);
 		}
 	}
 
@@ -136,7 +138,7 @@ export default class UserController extends ApiController implements ApiCrudCont
 			const user = await this.usersRepo.findByEmail(email);
 
 			if (!user) {
-				return ApiResponse.notFound("User not found");
+				return ApiResponse.notFound(errors.userNotFound);
 			}
 
 			const sendTokenEmail = await this.tokenEmail.TokenEmailSend(
@@ -148,12 +150,12 @@ export default class UserController extends ApiController implements ApiCrudCont
 				VerificationEmail
 			);
 
-			return ApiResponse.success("Verification email sent successfully", sendTokenEmail);
+			return ApiResponse.success(successes.verificationEmailSent, sendTokenEmail);
 		} catch (error: any) {
 			if (error instanceof z.ZodError) {
 				return ApiResponse.badRequest(error.errors.map(e => e.message).join(", "));
 			} else {
-				return ApiResponse.error(error.message, error);
+				return ApiResponse.error(errors.internalServerError, error);
 			}
 		}
 	}
@@ -167,14 +169,14 @@ export default class UserController extends ApiController implements ApiCrudCont
 				body.token
 			);
 
-			return ApiResponse.success("User verified successfully", verifyUser);
+			return ApiResponse.success(successes.accountVerified, verifyUser);
 		} catch (error: any) {
 			if (error instanceof PrismaClientValidationError) {
-				return ApiResponse.badRequest("Invalid token type");
-			} else if (error === "Invalid token") {
-				return ApiResponse.badRequest("Invalid token");
+				return ApiResponse.badRequest(errors.invalidTokenType);
+			} else if (error === errors.invalidToken) {
+				return ApiResponse.badRequest(errors.invalidToken);
 			} else {
-				return ApiResponse.error(error.message, error);
+				return ApiResponse.error(errors.internalServerError, error);
 			}
 		}
 	}
@@ -184,7 +186,7 @@ export default class UserController extends ApiController implements ApiCrudCont
 			const auth = await withAuthUser();
 
 			const userId = auth?.user.id;
-			const body: ChangePasswordInterface = await this.getReqBody();
+			const body: PasswordChangeSchemaType = await this.getReqBody();
 			const { oldPassword, newPassword, confirmPassword } = body;
 
 			PasswordChangeSchema.parse({
@@ -198,20 +200,20 @@ export default class UserController extends ApiController implements ApiCrudCont
 				confirmPassword
 			});
 
-			return ApiResponse.success("Password changed successfully", changePasswordData);
+			return ApiResponse.success(successes.passwordChanged, changePasswordData);
 		} catch (error: any) {
-			if (error.message === "Unauthorized Access") {
-				return ApiResponse.unauthorized("Unauthorized Access");
-			} else if (error.message === "Old password is incorrect") {
-				return ApiResponse.badRequest("Old password is incorrect");
-			} else if (error.message === "New password can not be same as old password") {
-				return ApiResponse.badRequest("New password can not be same as old password");
-			} else if (error.message === "User not found") {
-				return ApiResponse.notFound("User not found");
+			if (error.message === errors.unauthorized) {
+				return ApiResponse.unauthorized(errors.unauthorized);
+			} else if (error.message === errors.oldPasswordNotMatch) {
+				return ApiResponse.badRequest(errors.oldPasswordNotMatch);
+			} else if (error.message === errors.newPasswordCannotBeSame) {
+				return ApiResponse.badRequest(errors.newPasswordCannotBeSame);
+			} else if (error.message === errors.userNotFound) {
+				return ApiResponse.notFound(errors.userNotFound);
 			} else if (error instanceof z.ZodError) {
 				return ApiResponse.badRequest(error.errors.map(e => e.message).join(", "));
 			} else {
-				return ApiResponse.error(error.message, error);
+				return ApiResponse.error(errors.internalServerError, error);
 			}
 		}
 	}
@@ -223,7 +225,7 @@ export default class UserController extends ApiController implements ApiCrudCont
 			const user = await this.usersRepo.findByEmail(email);
 
 			if (!user) {
-				return ApiResponse.notFound("User not found");
+				return ApiResponse.notFound(errors.userNotFound);
 			}
 
 			const sendTokenEmail = await this.tokenEmail.TokenEmailSend(
@@ -235,9 +237,9 @@ export default class UserController extends ApiController implements ApiCrudCont
 				PasswordResetEmail
 			);
 
-			return ApiResponse.success("Password reset email sent successfully", sendTokenEmail);
+			return ApiResponse.success(successes.passwordEmailSent, sendTokenEmail);
 		} catch (error: any) {
-			return ApiResponse.error(error.message, error);
+			return ApiResponse.error(errors.internalServerError, error);
 		}
 	}
 
@@ -252,14 +254,14 @@ export default class UserController extends ApiController implements ApiCrudCont
 				body.password
 			);
 
-			return ApiResponse.success("Password has been reset successfully", verifyPasswordReset);
+			return ApiResponse.success(successes.passwordReset, verifyPasswordReset);
 		} catch (error: any) {
 			if (error instanceof PrismaClientValidationError) {
-				return ApiResponse.badRequest("Invalid token type");
-			} else if (error === "Invalid token") {
-				return ApiResponse.badRequest("Invalid token");
+				return ApiResponse.badRequest(errors.invalidTokenType);
+			} else if (error === errors.invalidToken) {
+				return ApiResponse.badRequest(errors.invalidToken);
 			} else {
-				return ApiResponse.error(error.message, error);
+				return ApiResponse.error(errors.internalServerError, error);
 			}
 		}
 	}

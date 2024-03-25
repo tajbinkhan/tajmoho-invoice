@@ -22,21 +22,9 @@ interface UserUpdateInterface {
 	updatedAt?: Date;
 }
 
-interface UserPasswordUpdateInputInterface {
-	password?: string;
-	new_password?: string;
-	new_password_confirmation?: string;
-}
-
 interface Credentials {
 	email: string;
 	password: string;
 	isProviderLogin?: boolean;
 	isProviderAccountId?: string;
-}
-
-interface ChangePasswordInterface {
-	oldPassword: string;
-	newPassword: string;
-	confirmPassword: string;
 }

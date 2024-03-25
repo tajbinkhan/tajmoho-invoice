@@ -148,3 +148,11 @@ export function convertAmountToWords(amount: number, currency = "USD"): string {
 
 	return words;
 }
+
+export const callbackUrlFn = (url: string) => {
+	const urlParams = new URLSearchParams(window.location.search);
+	const getCallbackUrl = encodeURIComponent(urlParams.get("callbackUrl") || "");
+	const mergeUrl = url + (getCallbackUrl ? `?callbackUrl=${getCallbackUrl}` : "");
+	const callbackUrl = mergeUrl || url;
+	return callbackUrl;
+};
