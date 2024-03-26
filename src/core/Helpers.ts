@@ -1,3 +1,5 @@
+import { StylesConfig } from "react-select";
+
 export function throwIf(condition: any, error: any) {
 	if (condition) {
 		throw new Error(error);
@@ -155,4 +157,76 @@ export const callbackUrlFn = (url: string) => {
 	const mergeUrl = url + (getCallbackUrl ? `?callbackUrl=${getCallbackUrl}` : "");
 	const callbackUrl = mergeUrl || url;
 	return callbackUrl;
+};
+
+export const editorConfiguration = {
+	placeholder: "Enter terms and conditions",
+	toolbar: [
+		"heading",
+		"|",
+		"bold",
+		"italic",
+		"link",
+		"bulletedList",
+		"numberedList",
+		"|",
+		"outdent",
+		"indent",
+		"|",
+		"undo",
+		"redo"
+	]
+};
+
+export const SelectStyles: StylesConfig = {
+	valueContainer: styles => ({
+		...styles,
+		padding: "0.35rem 0.75rem",
+		fontSize: "0.875rem",
+		lineHeight: "1.25rem"
+	}),
+	placeholder: styles => ({
+		...styles,
+		fontSize: "0.875rem",
+		lineHeight: "1.25rem"
+	}),
+	indicatorSeparator: styles => ({
+		...styles,
+		display: "none"
+	}),
+	control: (provided, state) => ({
+		...provided,
+		transition: "all 0.3s ease-in-out",
+		borderColor: "hsl(var(--input))",
+		borderRadius: "calc(var(--radius) - 2px)",
+		"&:hover": {
+			borderColor: "hsl(var(--input))",
+			cursor: "pointer"
+		},
+		"&:focus-within": {
+			borderColor: "hsl(var(--input))",
+			boxShadow: `0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring))`
+		}
+	}),
+	container: (provided, state) => ({
+		...provided,
+		"&:focus-visible": {
+			borderColor: "hsl(var(--input))",
+			boxShadow: `0 0 0 2px hsl(var(--ring))`
+		}
+	}),
+	menu: (provided, state) => ({
+		...provided,
+		"&:hover": {
+			borderColor: "hsl(var(--input))",
+			cursor: "pointer"
+		}
+	}),
+	option: (provided, state) => ({
+		...provided,
+		"&:hover": {
+			borderColor: "hsl(var(--input))",
+			cursor: "pointer"
+		}
+	})
 };

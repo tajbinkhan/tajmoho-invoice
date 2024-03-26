@@ -7,18 +7,9 @@ import useCustomSWR from "@/hooks/useCustomSWR";
 import ProformaInvoiceColumnData from "@/modules/ProformaInvoice/Templates/Table/ProformaInvoiceColumnData";
 import { route } from "@/routes/routes";
 import Link from "next/link";
-import { useState } from "react";
 
 export default function ProformaInvoiceTemplateView() {
-	const [id, setId] = useState<string>("");
-	const [open, setOpen] = useState<boolean>(false);
-
 	const { data, isLoading, refresh } = useCustomSWR(route.apiRoute.proformaInvoice);
-
-	const handleUpdate = (id: string) => {
-		setId(id);
-		setOpen(true);
-	};
 
 	return (
 		<LoadingBoundary isLoading={isLoading} fallback={<Loader height="calc(-144px + 100vh)" />}>
@@ -44,11 +35,7 @@ export default function ProformaInvoiceTemplateView() {
 					<div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
 						<div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
 							{data?.data && (
-								<ProformaInvoiceColumnData
-									data={data?.data}
-									refresh={refresh}
-									handleUpdate={handleUpdate}
-								/>
+								<ProformaInvoiceColumnData data={data?.data} refresh={refresh} />
 							)}
 						</div>
 					</div>

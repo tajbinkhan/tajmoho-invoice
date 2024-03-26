@@ -75,6 +75,55 @@ export const validateTotalAmount = z
 	)
 	.or(z.number().min(1, { message: messages.totalAmountIsRequired }));
 
+export const validateUnit = z
+	.object(
+		{
+			value: z.string().min(1, { message: messages.unitIsRequired }),
+			label: z.string().min(1, { message: messages.unitIsRequired })
+		},
+		{
+			required_error: messages.unitIsRequired,
+			invalid_type_error: messages.unitIsRequired
+		}
+	)
+	.or(z.null())
+	.refine(value => value !== null, { message: messages.unitIsRequired });
+
+export const validateClient = z
+	.object(
+		{
+			value: z.string().min(1, { message: messages.clientIsRequired }),
+			label: z.string().min(1, { message: messages.clientIsRequired })
+		},
+		{
+			required_error: messages.clientIsRequired,
+			invalid_type_error: messages.clientIsRequired
+		}
+	)
+	.or(z.null())
+	.refine(value => value !== null, { message: messages.clientIsRequired });
+
+export const validateCurrency = z
+	.object(
+		{
+			value: z.string().min(1, { message: messages.currencyIsRequired }),
+			label: z.string().min(1, { message: messages.currencyIsRequired })
+		},
+		{
+			required_error: messages.currencyIsRequired,
+			invalid_type_error: messages.currencyIsRequired
+		}
+	)
+	.or(z.null())
+	.refine(value => value !== null, { message: messages.currencyIsRequired });
+
+// Server side validation
 export const validateServerTotalAmount = z
 	.number()
 	.min(1, { message: messages.totalAmountIsRequired });
+
+export const validateServerUnit = z.string().min(1, { message: messages.unitIsRequired });
+
+export const validateServerClient = z.string().min(1, { message: messages.clientIsRequired });
+
+export const validateServerCurrency = z.string().min(1, { message: messages.currencyIsRequired });

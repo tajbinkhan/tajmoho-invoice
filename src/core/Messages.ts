@@ -7,6 +7,7 @@ export const messages = {
 	invoiceDateIsRequired: "Invoice Date is required",
 	clientIsRequired: "Client is required",
 	currencyIsRequired: "Currency is required",
+	minProducts: "At least one product is required",
 	nameIsRequired: "Name is required",
 	emailIsRequired: "Email address is required",
 	invalidEmail: "Invalid email address",

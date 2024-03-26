@@ -34,7 +34,10 @@ export default class ProformaInvoiceRepository extends PrismaBaseRepository {
 	async retrieve(id: string): Promise<ProformaInvoice | null> {
 		try {
 			const retrieveData = await this.clientModel.findUnique({
-				where: { id }
+				where: { id },
+				include: {
+					client: true
+				}
 			});
 
 			return Promise.resolve(retrieveData);
@@ -68,7 +71,14 @@ export default class ProformaInvoiceRepository extends PrismaBaseRepository {
 
 	async retrieveAll(): Promise<ProformaInvoice[]> {
 		try {
-			const retrieveAllData = await this.clientModel.findMany();
+			const retrieveAllData = await this.clientModel.findMany({
+				include: {
+					client: true
+				},
+				orderBy: {
+					createdAt: "desc"
+				}
+			});
 
 			return Promise.resolve(retrieveAllData);
 		} catch (error: any) {

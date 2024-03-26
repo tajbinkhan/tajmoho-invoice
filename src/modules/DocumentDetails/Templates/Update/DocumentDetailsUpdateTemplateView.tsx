@@ -13,30 +13,13 @@ import LoadingBoundary from "@/components/ui/loading-boundary";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { editorConfiguration } from "@/core/Helpers";
 import useDocumentDetailsUpdate from "@/modules/DocumentDetails/Hooks/useDocumentDetailsUpdate";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 
 export default function DocumentDetailsUpdateTemplateView() {
 	const { form, isLoading, isFormSubmitting, onSubmit } = useDocumentDetailsUpdate();
-	const editorConfiguration = {
-		placeholder: "Enter terms and conditions",
-		toolbar: [
-			"heading",
-			"|",
-			"bold",
-			"italic",
-			"link",
-			"bulletedList",
-			"numberedList",
-			"|",
-			"outdent",
-			"indent",
-			"|",
-			"undo",
-			"redo"
-		]
-	};
 
 	return (
 		<LoadingBoundary isLoading={isLoading} fallback={<Loader height="calc(-144px + 100vh)" />}>

@@ -35,7 +35,11 @@ export default class ProformaInvoiceController extends ApiController implements 
 	async create() {
 		try {
 			const body = await this.getReqBody();
-			const parse = ProformaInvoiceServerSchema.safeParse(body);
+			const filteredData = {
+				...body,
+				invoiceDate: new Date(body.invoiceDate)
+			};
+			const parse = ProformaInvoiceServerSchema.safeParse(filteredData);
 
 			if (!parse.success) {
 				return ApiResponse.badRequest("Invalid form submission data");
@@ -63,7 +67,11 @@ export default class ProformaInvoiceController extends ApiController implements 
 	async update(id: string) {
 		try {
 			const body = await this.getReqBody();
-			const parse = ProformaInvoiceServerSchema.safeParse(body);
+			const filteredData = {
+				...body,
+				invoiceDate: new Date(body.invoiceDate)
+			};
+			const parse = ProformaInvoiceServerSchema.safeParse(filteredData);
 
 			if (!parse.success) {
 				return ApiResponse.badRequest("Invalid form submission data");

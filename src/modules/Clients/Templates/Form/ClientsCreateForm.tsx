@@ -26,7 +26,6 @@ import { useState } from "react";
 
 export default function ClientsCreateForm({ refresh }: { refresh: () => void }) {
 	const [open, setOpen] = useState(false);
-	const { form, isFormSubmitting, onSubmit } = useClientsCreate(open, setOpen, refresh);
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
@@ -40,47 +39,59 @@ export default function ClientsCreateForm({ refresh }: { refresh: () => void }) 
 						Invoice&quot;.
 					</DialogDescription>
 				</DialogHeader>
-				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-						<FormField
-							control={form.control}
-							name="clientName"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Client Name</FormLabel>
-									<FormControl>
-										<Input placeholder="Enter you client name" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="officeAddress"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Office Address</FormLabel>
-									<FormControl>
-										<Textarea
-											placeholder="Enter you client address"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<DialogFooter>
-							<LoadingButton
-								isLoading={isFormSubmitting}
-								text="Create Client"
-								loadingText="Creating Client..."
-							/>
-						</DialogFooter>
-					</form>
-				</Form>
+				<ClientForm open={open} setOpen={setOpen} refresh={refresh} />
 			</DialogContent>
 		</Dialog>
 	);
 }
+
+export const ClientForm = ({
+	open,
+	setOpen,
+	refresh
+}: {
+	open: boolean;
+	setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+	refresh: () => void;
+}) => {
+	const { form, isFormSubmitting, onSubmit } = useClientsCreate(open, setOpen, refresh);
+	return (
+		<Form {...form}>
+			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+				<FormField
+					control={form.control}
+					name="clientName"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Client Name</FormLabel>
+							<FormControl>
+								<Input placeholder="Enter you client name" {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="officeAddress"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Office Address</FormLabel>
+							<FormControl>
+								<Textarea placeholder="Enter you client address" {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<DialogFooter>
+					<LoadingButton
+						isLoading={isFormSubmitting}
+						text="Create Client"
+						loadingText="Creating Client..."
+					/>
+				</DialogFooter>
+			</form>
+		</Form>
+	);
+};

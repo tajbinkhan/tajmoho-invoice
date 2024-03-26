@@ -1,8 +1,14 @@
 import { messages } from "@/core/Messages";
 import {
+	validateClient,
+	validateCurrency,
 	validateQuantity,
+	validateServerClient,
+	validateServerCurrency,
 	validateServerTotalAmount,
+	validateServerUnit,
 	validateTotalAmount,
+	validateUnit,
 	validateUnitPrice
 } from "@/validators/CommonRules";
 import { z } from "zod";
@@ -11,33 +17,52 @@ const productsArray = z.array(
 	z.object({
 		productName: z.string().min(1, { message: messages.productNameIsRequired }),
 		quantity: validateQuantity,
-		unit: z.string().min(1, { message: messages.unitIsRequired }),
+		unit: validateUnit,
 		unitPrice: validateUnitPrice
 	})
 );
 
+const productsArrayServer = z.array(
+	z.object({
+		productName: z.string().min(1, { message: messages.productNameIsRequired }),
+		quantity: z.number().min(1, { message: messages.quantityIsRequired }),
+		unit: validateServerUnit,
+		unitPrice: z.number().min(1, { message: messages.priceIsRequired })
+	})
+);
+
 export const ProformaInvoiceSchema = z.object({
-	invoiceNumber: z.string().min(1, { message: messages.invoiceNumberIsRequired }),
-	invoiceDate: z.date().min(new Date(), { message: messages.invoiceDateIsRequired }),
-	client: z.string({
-		required_error: messages.clientIsRequired
+	invoiceNumber: z
+		.string({
+			required_error: messages.invoiceNumberIsRequired
+		})
+		.min(1, { message: messages.invoiceNumberIsRequired }),
+	invoiceDate: z.date({
+		required_error: messages.invoiceDateIsRequired
 	}),
-	currency: z.string().min(1, { message: messages.currencyIsRequired }),
-	products: productsArray,
+	client: validateClient,
+	currency: validateCurrency,
+	products: productsArray.min(1, { message: messages.minProducts }),
 	customTotalAmount: z.boolean(),
 	customTermsAndConditions: z.boolean(),
 	totalAmount: validateTotalAmount,
-	termsAndConditions: z.string().min(1, { message: messages.termsAndConditionsIsRequired })
+	termsAndConditions: z
+		.string({
+			required_error: messages.termsAndConditionsIsRequired
+		})
+		.min(1, { message: messages.termsAndConditionsIsRequired })
 });
 
 export const ProformaInvoiceServerSchema = ProformaInvoiceSchema.omit({
 	client: true,
 	totalAmount: true,
-	products: true
+	products: true,
+	currency: true
 }).extend({
 	totalAmount: validateServerTotalAmount,
-	products: productsArray,
-	clientId: z.string().min(1, { message: messages.clientIsRequired })
+	products: productsArrayServer.min(1, { message: messages.minProducts }),
+	clientId: validateServerClient,
+	currency: validateServerCurrency
 });
 
 export type ProformaInvoiceSchemaType = z.infer<typeof ProformaInvoiceSchema>;

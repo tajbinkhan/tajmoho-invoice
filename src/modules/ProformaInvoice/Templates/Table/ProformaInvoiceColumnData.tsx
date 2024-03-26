@@ -13,11 +13,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { numberWithCommas } from "@/core/Helpers";
 import { ProformaInvoiceTableData } from "@/modules/ProformaInvoice/Templates/Table/ProformaInvoiceTableData";
 import { route } from "@/routes/routes";
 import { ColumnDef } from "@tanstack/react-table";
 import axios from "axios";
 import { format } from "date-fns";
+import Link from "next/link";
 import { BiSolidEdit } from "react-icons/bi";
 import { HiTrash } from "react-icons/hi2";
 import { LuArrowUpDown } from "react-icons/lu";
@@ -57,13 +59,12 @@ interface ProformaInvoiceData {
 interface Props {
 	data: ProformaInvoiceData[];
 	refresh: () => void;
-	handleUpdate: (uid: string) => void;
 }
 
-export default function ProformaInvoiceColumnData({ data, refresh, handleUpdate }: Props) {
+export default function ProformaInvoiceColumnData({ data, refresh }: Props) {
 	const handleDelete = async (id: string) => {
 		await axios
-			.delete(`${route.apiRoute.clients}/${id}`)
+			.delete(`${route.apiRoute.proformaInvoice}/${id}`)
 			.then(() => {
 				refresh();
 				toast.success("Proforma invoice deleted successfully");
@@ -130,7 +131,7 @@ export default function ProformaInvoiceColumnData({ data, refresh, handleUpdate 
 			}
 		},
 		{
-			accessorKey: "Products",
+			accessorKey: "products",
 			header: ({ column }) => {
 				return (
 					<Button
@@ -147,14 +148,33 @@ export default function ProformaInvoiceColumnData({ data, refresh, handleUpdate 
 				const data = row.original;
 				return (
 					<div className="flex flex-col gap-3">
-						{data.products.map(product => (
-							<Button key={product.id}>
+						{data.products.map((product, index) => (
+							<Button key={index} variant={"outline"} className="w-fit">
 								{product.productName} (Qty = {product.quantity}), Price ={" "}
 								{product.unitPrice} {data.currency}
 							</Button>
 						))}
 					</div>
 				);
+			}
+		},
+		{
+			accessorKey: "totalAmount",
+			header: ({ column }) => {
+				return (
+					<Button
+						variant="sorting"
+						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+						className="text-left"
+					>
+						Total Amount
+						<LuArrowUpDown className="ml-2 h-4 w-4" />
+					</Button>
+				);
+			},
+			cell: ({ row }) => {
+				const data = row.original;
+				return `${data.currency} ${numberWithCommas(data.totalAmount)}`;
 			}
 		},
 		{
@@ -210,7 +230,7 @@ export default function ProformaInvoiceColumnData({ data, refresh, handleUpdate 
 				const data = row.original;
 
 				return (
-					<div className="space-x-2">
+					<div className="flex gap-2">
 						<TooltipProvider>
 							<Tooltip>
 								<TooltipTrigger asChild>
@@ -218,9 +238,13 @@ export default function ProformaInvoiceColumnData({ data, refresh, handleUpdate 
 										variant={"default"}
 										size={"sm"}
 										className="h-auto p-2"
-										onClick={() => handleUpdate(data.id)}
+										asChild
 									>
-										<BiSolidEdit />
+										<Link
+											href={`${route.dashboardRoute.proformaInvoice}/${data.id}`}
+										>
+											<BiSolidEdit />
+										</Link>
 									</Button>
 								</TooltipTrigger>
 								<TooltipContent>
