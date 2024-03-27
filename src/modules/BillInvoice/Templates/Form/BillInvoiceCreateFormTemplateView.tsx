@@ -12,7 +12,7 @@ import { ClientForm } from "@/modules/Clients/Templates/Form/ClientsCreateForm";
 import useProformaInvoiceCreateForm from "@/modules/ProformaInvoice/Hooks/useProformaInvoiceCreateForm";
 import ProformaInvoiceForm from "@/modules/ProformaInvoice/Templates/Form/ProformaInvoiceForm";
 
-export default function ProformaInvoiceCreateFormTemplateView() {
+export default function BillInvoiceCreateFormTemplateView() {
 	const {
 		form,
 		openClientForm,
@@ -35,9 +35,9 @@ export default function ProformaInvoiceCreateFormTemplateView() {
 	return (
 		<div className="space-y-6">
 			<div>
-				<h3 className="text-lg font-medium">Create New Proforma Invoice</h3>
+				<h3 className="text-lg font-medium">Create New Bill Invoice</h3>
 				<p className="text-sm text-muted-foreground">
-					Please fill in the form below to create a new proforma invoice.
+					Please fill in the form below to create a new bill invoice.
 				</p>
 			</div>
 			<Separator />

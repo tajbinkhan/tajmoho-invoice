@@ -31,7 +31,14 @@ export default function ClientsTemplateView() {
 		<LoadingBoundary isLoading={isLoading} fallback={<Loader height="calc(-144px + 100vh)" />}>
 			{/* Update Form */}
 			<Dialog open={open} onOpenChange={setOpen}>
-				<DialogContent>
+				<DialogContent
+					onInteractOutside={e => {
+						e.preventDefault();
+					}}
+					onOpenAutoFocus={e => {
+						e.preventDefault();
+					}}
+				>
 					<DialogHeader>
 						<DialogTitle>Update Client Details</DialogTitle>
 						<DialogDescription>

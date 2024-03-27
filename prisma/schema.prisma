@@ -76,6 +76,7 @@ model Clients {
   updatedAt     DateTime @updatedAt
 
   proformaInvoice ProformaInvoice[]
+  billInvoice     BillInvoice[]
 }
 
 model DocumentDetails {
@@ -92,6 +93,24 @@ model ProformaInvoice {
   invoiceNumber            String
   invoiceDate              DateTime
   currency                 String
+  products                 Json
+  totalAmount              Float
+  termsAndConditions       String   @db.Text
+  customTotalAmount        Boolean
+  customTermsAndConditions Boolean
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+
+  client Clients @relation(fields: [clientId], references: [id])
+}
+
+model BillInvoice {
+  id                       String   @id @default(uuid())
+  clientId                 String
+  invoiceNumber            String
+  invoiceDate              DateTime
+  currency                 String
+  description              String
   products                 Json
   totalAmount              Float
   termsAndConditions       String   @db.Text

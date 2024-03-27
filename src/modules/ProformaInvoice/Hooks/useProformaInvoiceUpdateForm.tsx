@@ -16,7 +16,7 @@ import { toast } from "sonner";
 export default function useProformaInvoiceUpdateForm(id: string) {
 	const [openClientForm, setOpenClientForm] = useState(false);
 
-	const apiUrl = route.apiRoute.proformaInvoice + "/" + id;
+	const apiUrl = route.apiRoute.proformaInvoiceUpdate(id);
 
 	const router = useRouter();
 

@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { numberWithCommas } from "@/core/Helpers";
-import { ProformaInvoiceTableData } from "@/modules/ProformaInvoice/Templates/Table/ProformaInvoiceTableData";
+import { BillInvoiceTableData } from "@/modules/BillInvoice/Templates/Table/BillInvoiceTableData";
 import { route } from "@/routes/routes";
 import { ColumnDef } from "@tanstack/react-table";
 import axios from "axios";
@@ -33,7 +33,7 @@ interface Client {
 	updatedAt: Date;
 }
 
-interface ProformaInvoiceProducts {
+interface BillInvoiceProducts {
 	id: string;
 	productName: string;
 	quantity: number;
@@ -43,7 +43,7 @@ interface ProformaInvoiceProducts {
 	updatedAt: Date;
 }
 
-interface ProformaInvoiceData {
+interface BillInvoiceData {
 	id: string;
 	invoiceNumber: string;
 	invoiceDate: Date;
@@ -51,31 +51,31 @@ interface ProformaInvoiceData {
 	totalAmount: number;
 	termsAndConditions: string;
 	client: Client;
-	products: ProformaInvoiceProducts[];
+	products: BillInvoiceProducts[];
 	createdAt: Date;
 	updatedAt: Date;
 }
 
 interface Props {
-	data: ProformaInvoiceData[];
+	data: BillInvoiceData[];
 	refresh: () => void;
 }
 
-export default function ProformaInvoiceColumnData({ data, refresh }: Props) {
+export default function BillInvoiceColumnData({ data, refresh }: Props) {
 	const handleDelete = async (id: string) => {
 		await axios
-			.delete(`${route.apiRoute.proformaInvoice}/${id}`)
+			.delete(`${route.apiRoute.billInvoice}/${id}`)
 			.then(() => {
 				refresh();
-				toast.success("Proforma invoice deleted successfully");
+				toast.success("Bill invoice deleted successfully");
 			})
 			.catch(() => {
 				refresh();
-				toast.error("Failed to delete proforma invoice. Please try again.");
+				toast.error("Failed to delete bill invoice. Please try again.");
 			});
 	};
 
-	const columns: ColumnDef<ProformaInvoiceData>[] = [
+	const columns: ColumnDef<BillInvoiceData>[] = [
 		{
 			accessorKey: "invoiceDate",
 			header: ({ column }) => {
@@ -241,9 +241,7 @@ export default function ProformaInvoiceColumnData({ data, refresh }: Props) {
 										asChild
 									>
 										<Link
-											href={route.dashboardRoute.proformaInvoiceUpdate(
-												data.id
-											)}
+											href={route.dashboardRoute.billInvoiceUpdate(data.id)}
 										>
 											<BiSolidEdit />
 										</Link>
@@ -299,5 +297,5 @@ export default function ProformaInvoiceColumnData({ data, refresh }: Props) {
 		}
 	];
 
-	return <ProformaInvoiceTableData data={data} columns={columns} />;
+	return <BillInvoiceTableData data={data} columns={columns} />;
 }

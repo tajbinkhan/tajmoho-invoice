@@ -19,6 +19,9 @@ export const route = {
 		billInvoice: `${dashboardPrefix}/bill-invoice`,
 		proformaInvoice: `${dashboardPrefix}/proforma-invoice`,
 		proformaInvoiceCreate: `${dashboardPrefix}/proforma-invoice/create`,
+		proformaInvoiceUpdate: (id: string) => `${dashboardPrefix}/proforma-invoice/${id}`,
+		billInvoiceCreate: `${dashboardPrefix}/bill-invoice/create`,
+		billInvoiceUpdate: (id: string) => `${dashboardPrefix}/bill-invoice/${id}`,
 		clients: `${dashboardPrefix}/clients`,
 		documentDetails: `${dashboardPrefix}/document-details`,
 		documentDetailsUpdate: `${dashboardPrefix}/document-details/update`,
@@ -37,6 +40,9 @@ export const route = {
 		userVerificationDone: `${apiRoutePrefix}/auth/user-verification/done`,
 		clients: `${apiRoutePrefix}/clients`,
 		documentDetails: `${apiRoutePrefix}/document-details`,
-		proformaInvoice: `${apiRoutePrefix}/proforma-invoice`
+		proformaInvoice: `${apiRoutePrefix}/proforma-invoice`,
+		proformaInvoiceUpdate: (id: string) => `${apiRoutePrefix}/proforma-invoice/${id}`,
+		billInvoice: `${apiRoutePrefix}/bill-invoice`,
+		billInvoiceUpdate: (id: string) => `${apiRoutePrefix}/bill-invoice/${id}`
 	}
 } as const;

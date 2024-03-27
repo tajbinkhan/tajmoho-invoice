@@ -22,6 +22,8 @@ export const messages = {
 	confirmPasswordRequired: "Confirm Password is required",
 	passwordsDidNotMatch: "Passwords don't match",
 	productNameIsRequired: "Product name is required",
+	colorNameIsRequired: "Color name is required",
+	colorCountIsRequired: "Color count is required",
 	quantityIsRequired: "Product quantity is required",
 	quantityMustBeNumber: "Quantity must be a number",
 	unitIsRequired: "Product unit is required",
@@ -29,5 +31,6 @@ export const messages = {
 	priceIsRequired: "Product price is required",
 	priceMustBeNumber: "Price must be a number",
 	totalAmountIsRequired: "Total amount is required",
-	totalAmountMustBeNumber: "Total amount must be a number"
+	totalAmountMustBeNumber: "Total amount must be a number",
+	descriptionIsRequired: "Description is required"
 };

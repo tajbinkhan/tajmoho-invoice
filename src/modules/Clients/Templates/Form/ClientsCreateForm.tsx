@@ -31,7 +31,14 @@ export default function ClientsCreateForm({ refresh }: { refresh: () => void }) 
 			<DialogTrigger asChild>
 				<Button>Add Client</Button>
 			</DialogTrigger>
-			<DialogContent>
+			<DialogContent
+				onInteractOutside={e => {
+					e.preventDefault();
+				}}
+				onOpenAutoFocus={e => {
+					e.preventDefault();
+				}}
+			>
 				<DialogHeader>
 					<DialogTitle>Enter Client Details</DialogTitle>
 					<DialogDescription>

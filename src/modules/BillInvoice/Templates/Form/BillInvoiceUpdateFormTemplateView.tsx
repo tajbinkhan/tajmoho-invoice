@@ -14,7 +14,7 @@ import { ClientForm } from "@/modules/Clients/Templates/Form/ClientsCreateForm";
 import useProformaInvoiceUpdateForm from "@/modules/ProformaInvoice/Hooks/useProformaInvoiceUpdateForm";
 import ProformaInvoiceForm from "@/modules/ProformaInvoice/Templates/Form/ProformaInvoiceForm";
 
-export default function ProformaInvoiceUpdateFormTemplateView({ id }: { id: string }) {
+export default function BillInvoiceUpdateFormTemplateView({ id }: { id: string }) {
 	const {
 		form,
 		openClientForm,
@@ -43,10 +43,10 @@ export default function ProformaInvoiceUpdateFormTemplateView({ id }: { id: stri
 			<div className="space-y-6">
 				<div>
 					<h3 className="text-lg font-medium">
-						Update Proforma Invoice #{form.getValues("invoiceNumber")}
+						Update Bill Invoice #{form.getValues("invoiceNumber")}
 					</h3>
 					<p className="text-sm text-muted-foreground">
-						Please fill in the form below to update the proforma invoice.
+						Please fill in the form below to update the bill invoice.
 					</p>
 				</div>
 				<Separator />

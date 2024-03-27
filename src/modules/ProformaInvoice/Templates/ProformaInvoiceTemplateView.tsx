@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import Error from "@/components/ui/error";
 import Loader from "@/components/ui/loader";
 import LoadingBoundary from "@/components/ui/loading-boundary";
 import useCustomSWR from "@/hooks/useCustomSWR";
@@ -9,10 +10,15 @@ import { route } from "@/routes/routes";
 import Link from "next/link";
 
 export default function ProformaInvoiceTemplateView() {
-	const { data, isLoading, refresh } = useCustomSWR(route.apiRoute.proformaInvoice);
+	const { data, isLoading, refresh, error } = useCustomSWR(route.apiRoute.proformaInvoice);
 
 	return (
-		<LoadingBoundary isLoading={isLoading} fallback={<Loader height="calc(-144px + 100vh)" />}>
+		<LoadingBoundary
+			isLoading={isLoading}
+			isError={error}
+			errorFallback={<Error />}
+			fallback={<Loader height="calc(-144px + 100vh)" />}
+		>
 			<div className="px-4 sm:px-6 lg:px-8">
 				<div className="sm:flex sm:items-center">
 					<div className="sm:flex-auto">
