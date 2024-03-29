@@ -34,7 +34,7 @@ export default class BillInvoiceController extends ApiController implements ApiC
 			const body = await this.getReqBody();
 			const filteredData = {
 				...body,
-				invoiceDate: new Date(body.invoiceDate)
+				billDate: new Date(body.billDate)
 			};
 			const parse = BillInvoiceServerSchema.safeParse(filteredData);
 
@@ -66,7 +66,7 @@ export default class BillInvoiceController extends ApiController implements ApiC
 			const body = await this.getReqBody();
 			const filteredData = {
 				...body,
-				invoiceDate: new Date(body.invoiceDate)
+				billDate: new Date(body.billDate)
 			};
 			const parse = BillInvoiceServerSchema.safeParse(filteredData);
 

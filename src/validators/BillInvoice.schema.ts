@@ -15,8 +15,16 @@ import { z } from "zod";
 
 const productsArray = z.array(
 	z.object({
-		colorName: z.string().min(1, { message: messages.colorNameIsRequired }),
-		colorCount: z.string().min(1, { message: messages.colorCountIsRequired }),
+		colorName: z
+			.string({
+				required_error: messages.colorNameIsRequired
+			})
+			.min(1, { message: messages.colorNameIsRequired }),
+		colorCount: z
+			.string({
+				required_error: messages.colorCountIsRequired
+			})
+			.min(1, { message: messages.colorCountIsRequired }),
 		quantity: validateQuantity,
 		unit: validateUnit,
 		unitPrice: validateUnitPrice
@@ -25,8 +33,16 @@ const productsArray = z.array(
 
 const productsArrayServer = z.array(
 	z.object({
-		colorName: z.string().min(1, { message: messages.colorNameIsRequired }),
-		colorCount: z.string().min(1, { message: messages.colorCountIsRequired }),
+		colorName: z
+			.string({
+				required_error: messages.colorNameIsRequired
+			})
+			.min(1, { message: messages.colorNameIsRequired }),
+		colorCount: z
+			.string({
+				required_error: messages.colorCountIsRequired
+			})
+			.min(1, { message: messages.colorCountIsRequired }),
 		quantity: z.number().min(1, { message: messages.quantityIsRequired }),
 		unit: validateServerUnit,
 		unitPrice: z.number().min(1, { message: messages.priceIsRequired })
@@ -34,17 +50,21 @@ const productsArrayServer = z.array(
 );
 
 export const BillInvoiceSchema = z.object({
-	invoiceNumber: z
+	billNumber: z
 		.string({
 			required_error: messages.invoiceNumberIsRequired
 		})
 		.min(1, { message: messages.invoiceNumberIsRequired }),
-	invoiceDate: z.date({
+	billDate: z.date({
 		required_error: messages.invoiceDateIsRequired
 	}),
 	client: validateClient,
 	currency: validateCurrency,
-	description: z.string().min(1, { message: messages.descriptionIsRequired }),
+	description: z
+		.string({
+			required_error: messages.descriptionIsRequired
+		})
+		.min(1, { message: messages.descriptionIsRequired }),
 	products: productsArray.min(1, { message: messages.minProducts }),
 	customTotalAmount: z.boolean(),
 	customTermsAndConditions: z.boolean(),

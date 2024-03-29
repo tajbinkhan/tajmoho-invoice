@@ -107,8 +107,8 @@ model ProformaInvoice {
 model BillInvoice {
   id                       String   @id @default(uuid())
   clientId                 String
-  invoiceNumber            String
-  invoiceDate              DateTime
+  billNumber               String
+  billDate                 DateTime
   currency                 String
   description              String
   products                 Json

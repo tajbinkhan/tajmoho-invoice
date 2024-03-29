@@ -52,10 +52,10 @@ export function BillInvoiceTableData<TData, TValue>({ columns, data }: Props<TDa
 		<>
 			<div className="absolute flex items-center py-4">
 				<Input
-					placeholder="Filter invoice number..."
-					value={(table.getColumn("invoiceNumber")?.getFilterValue() as string) ?? ""}
+					placeholder="Filter bill number..."
+					value={(table.getColumn("billNumber")?.getFilterValue() as string) ?? ""}
 					onChange={event =>
-						table.getColumn("invoiceNumber")?.setFilterValue(event.target.value)
+						table.getColumn("billNumber")?.setFilterValue(event.target.value)
 					}
 					className="focus:ring-primary-500 max-w-lg rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-opacity-50"
 				/>

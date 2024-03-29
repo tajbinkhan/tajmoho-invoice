@@ -38,6 +38,7 @@ export const route = {
 		userAuthentication: `${apiRoutePrefix}/auth/user-authentication`,
 		userVerification: `${apiRoutePrefix}/auth/user-verification`,
 		userVerificationDone: `${apiRoutePrefix}/auth/user-verification/done`,
+		stats: `${apiRoutePrefix}/stats`,
 		clients: `${apiRoutePrefix}/clients`,
 		documentDetails: `${apiRoutePrefix}/document-details`,
 		proformaInvoice: `${apiRoutePrefix}/proforma-invoice`,

@@ -3,6 +3,7 @@ import { siteDescription, siteTitle } from "@/core/Helpers";
 import { NextAuthProvider } from "@/providers/NextAuthProvider";
 import type { Metadata } from "next";
 import { Poppins as FontSans } from "next/font/google";
+import NextTopLoader from "nextjs-toploader";
 import { Suspense } from "react";
 import "./globals.css";
 
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: Readonly<GlobalLayoutInterface>
 	return (
 		<html lang="en">
 			<body className={fontSans.className} suppressHydrationWarning={true}>
+				<NextTopLoader showSpinner={false} />
 				<NextAuthProvider>
 					<Suspense fallback={<Loader />}>{children}</Suspense>
 				</NextAuthProvider>

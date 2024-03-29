@@ -35,7 +35,8 @@ interface Client {
 
 interface BillInvoiceProducts {
 	id: string;
-	productName: string;
+	colorName: string;
+	colorCount: string;
 	quantity: number;
 	unitPrice: number;
 	totalPrice: number;
@@ -45,8 +46,8 @@ interface BillInvoiceProducts {
 
 interface BillInvoiceData {
 	id: string;
-	invoiceNumber: string;
-	invoiceDate: Date;
+	billNumber: string;
+	billDate: Date;
 	currency: string;
 	totalAmount: number;
 	termsAndConditions: string;
@@ -77,7 +78,7 @@ export default function BillInvoiceColumnData({ data, refresh }: Props) {
 
 	const columns: ColumnDef<BillInvoiceData>[] = [
 		{
-			accessorKey: "invoiceDate",
+			accessorKey: "billDate",
 			header: ({ column }) => {
 				return (
 					<Button
@@ -92,12 +93,12 @@ export default function BillInvoiceColumnData({ data, refresh }: Props) {
 			},
 			cell: ({ row }) => {
 				const data = row.original;
-				const formattedDate = format(data.invoiceDate, "dd/MM/yyyy");
+				const formattedDate = format(data.billDate, "dd/MM/yyyy");
 				return formattedDate;
 			}
 		},
 		{
-			accessorKey: "invoiceNumber",
+			accessorKey: "billNumber",
 			header: ({ column }) => {
 				return (
 					<Button
@@ -150,8 +151,8 @@ export default function BillInvoiceColumnData({ data, refresh }: Props) {
 					<div className="flex flex-col gap-3">
 						{data.products.map((product, index) => (
 							<Button key={index} variant={"outline"} className="w-fit">
-								{product.productName} (Qty = {product.quantity}), Price ={" "}
-								{product.unitPrice} {data.currency}
+								{product.colorName} ({product.colorCount}) (Qty = {product.quantity}
+								), Price = {product.unitPrice} {data.currency}
 							</Button>
 						))}
 					</div>
@@ -275,7 +276,7 @@ export default function BillInvoiceColumnData({ data, refresh }: Props) {
 							<AlertDialogContent>
 								<AlertDialogHeader>
 									<AlertDialogTitle>
-										Are you sure, you want to delete &quot;{data.invoiceNumber}
+										Are you sure, you want to delete &quot;{data.billNumber}
 										&quot;?
 									</AlertDialogTitle>
 									<AlertDialogDescription>

@@ -1,29 +1,67 @@
+"use client";
+
+import Loader from "@/components/ui/loader";
+import LoadingBoundary from "@/components/ui/loading-boundary";
+import useCustomSWR from "@/hooks/useCustomSWR";
+import { route } from "@/routes/routes";
+import { useEffect, useState } from "react";
 import { FaFileInvoice, FaStamp, FaUserSecret } from "react-icons/fa6";
 
-const stats = [
+interface Stats {
+	id: number;
+	name: string;
+	stat: string;
+	icon: any;
+}
+
+const initialStats: Stats[] = [
 	{
 		id: 1,
 		name: "Total Invoices",
-		stat: "47",
+		stat: "0",
 		icon: FaFileInvoice
-	},
-	{
-		id: 2,
-		name: "Total Stickers",
-		stat: "7",
-		icon: FaStamp
 	},
 	{
 		id: 3,
 		name: "Total Clients",
-		stat: "45",
+		stat: "0",
 		icon: FaUserSecret
+	},
+	{
+		id: 2,
+		name: "Total Stickers",
+		stat: "0",
+		icon: FaStamp
 	}
 ];
 
 export default function DashboardTemplateView() {
+	const [stats, setStats] = useState<Stats[]>(initialStats);
+	const { data, isLoading } = useCustomSWR(route.apiRoute.stats);
+
+	useEffect(() => {
+		if (data?.data) {
+			const countData = data.data as number[];
+			const newStats = [
+				{
+					...initialStats[0],
+					stat: (countData[0] + countData[1]).toString()
+				},
+				{
+					...initialStats[1],
+					stat: countData[2].toString()
+				},
+				{
+					...initialStats[2]
+				}
+			];
+
+			setStats(newStats);
+		}
+	}, [data]);
+
 	return (
-		<div>
+		<LoadingBoundary isLoading={isLoading} fallback={<Loader height="calc(-144px + 100vh)" />}>
 			<h3 className="text-base font-semibold leading-6 text-gray-900">Last 30 days</h3>
 
 			<dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -56,6 +94,6 @@ export default function DashboardTemplateView() {
 					</div>
 				))}
 			</dl>
-		</div>
+		</LoadingBoundary>
 	);
 }

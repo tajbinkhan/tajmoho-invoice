@@ -10,9 +10,9 @@ import {
 import Loader from "@/components/ui/loader";
 import LoadingBoundary from "@/components/ui/loading-boundary";
 import { Separator } from "@/components/ui/separator";
+import useBillInvoiceUpdateForm from "@/modules/BillInvoice/Hooks/useBillInvoiceUpdateForm";
+import BillInvoiceForm from "@/modules/BillInvoice/Templates/Form/BillInvoiceForm";
 import { ClientForm } from "@/modules/Clients/Templates/Form/ClientsCreateForm";
-import useProformaInvoiceUpdateForm from "@/modules/ProformaInvoice/Hooks/useProformaInvoiceUpdateForm";
-import ProformaInvoiceForm from "@/modules/ProformaInvoice/Templates/Form/ProformaInvoiceForm";
 
 export default function BillInvoiceUpdateFormTemplateView({ id }: { id: string }) {
 	const {
@@ -32,18 +32,18 @@ export default function BillInvoiceUpdateFormTemplateView({ id }: { id: string }
 		clientsIsLoading,
 		clientsRefresh,
 		documentIsLoading,
-		proformaInvoiceIsLoading
-	} = useProformaInvoiceUpdateForm(id);
+		billInvoiceIsLoading
+	} = useBillInvoiceUpdateForm(id);
 
 	return (
 		<LoadingBoundary
-			isLoading={proformaInvoiceIsLoading}
+			isLoading={billInvoiceIsLoading}
 			fallback={<Loader height="calc(-144px + 100vh)" />}
 		>
 			<div className="space-y-6">
 				<div>
 					<h3 className="text-lg font-medium">
-						Update Bill Invoice #{form.getValues("invoiceNumber")}
+						Update Bill Invoice #{form.getValues("billNumber")}
 					</h3>
 					<p className="text-sm text-muted-foreground">
 						Please fill in the form below to update the bill invoice.
@@ -73,7 +73,7 @@ export default function BillInvoiceUpdateFormTemplateView({ id }: { id: string }
 						/>
 					</DialogContent>
 				</Dialog>
-				<ProformaInvoiceForm
+				<BillInvoiceForm
 					form={form}
 					onSubmit={onSubmit}
 					customTotalAmount={customTotalAmount}
@@ -89,8 +89,8 @@ export default function BillInvoiceUpdateFormTemplateView({ id }: { id: string }
 					isFormSubmitting={isFormSubmitting}
 					clientsRefresh={clientsRefresh}
 					setOpenClientForm={setOpenClientForm}
-					text="Update Proforma Invoice"
-					loadingText="Updating Proforma Invoice..."
+					text="Update Bill Invoice"
+					loadingText="Updating Bill Invoice..."
 				/>
 			</div>
 		</LoadingBoundary>

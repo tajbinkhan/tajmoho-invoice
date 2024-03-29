@@ -15,7 +15,7 @@ import NumericInput from "@/components/ui/numeric-input";
 import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { SelectStyles, editorConfiguration } from "@/core/Helpers";
-import { ProformaInvoiceSchemaType } from "@/validators/ProformaInvoice.schema";
+import { BillInvoiceSchemaType } from "@/validators/BillInvoice.schema";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { UseFormReturn } from "react-hook-form";
@@ -24,7 +24,8 @@ import Select from "react-select";
 
 interface IField {
 	id: string;
-	productName: string;
+	colorName: string;
+	colorCount: string;
 	quantity: string | number;
 	unit: {
 		label: string;
@@ -33,8 +34,8 @@ interface IField {
 	unitPrice: string | number;
 }
 
-interface IProformaInvoiceForm {
-	form: UseFormReturn<ProformaInvoiceSchemaType>;
+interface IBillInvoiceForm {
+	form: UseFormReturn<BillInvoiceSchemaType>;
 	setOpenClientForm: React.Dispatch<React.SetStateAction<boolean>>;
 	clientsOptions: { label: string; value: string }[];
 	currencyOptions: { label: string; value: string }[];
@@ -42,7 +43,7 @@ interface IProformaInvoiceForm {
 	customTotalAmount: boolean;
 	customTermsAndConditions: boolean;
 	isFormSubmitting: boolean;
-	onSubmit: (data: ProformaInvoiceSchemaType) => void;
+	onSubmit: (data: BillInvoiceSchemaType) => void;
 	fields: IField[];
 	append: (data: any) => void;
 	remove: (index: number) => void;
@@ -53,7 +54,7 @@ interface IProformaInvoiceForm {
 	loadingText: string;
 }
 
-export default function ProformaInvoiceForm({
+export default function BillInvoiceForm({
 	form,
 	setOpenClientForm,
 	clientsOptions,
@@ -70,7 +71,7 @@ export default function ProformaInvoiceForm({
 	documentIsLoading,
 	text,
 	loadingText
-}: IProformaInvoiceForm) {
+}: IBillInvoiceForm) {
 	return (
 		<Form {...form}>
 			<form
@@ -81,7 +82,7 @@ export default function ProformaInvoiceForm({
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 					<FormField
 						control={form.control}
-						name="invoiceNumber"
+						name="billNumber"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Invoice Number</FormLabel>
@@ -99,7 +100,7 @@ export default function ProformaInvoiceForm({
 
 					<FormField
 						control={form.control}
-						name="invoiceDate"
+						name="billDate"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Invoice Date</FormLabel>
@@ -175,19 +176,57 @@ export default function ProformaInvoiceForm({
 					/>
 				</div>
 
+				<div className="w-full">
+					<FormField
+						control={form.control}
+						name="description"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Description</FormLabel>
+								<FormControl>
+									<Input
+										placeholder="Enter description"
+										disabled={isFormSubmitting}
+										{...field}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+				</div>
+
 				<div className="w-full space-y-4 rounded-md border p-4">
 					{fields.map((field, index) => (
 						<div key={field.id} className="flex gap-4">
-							<div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-4">
+							<div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-5">
 								<FormField
 									control={form.control}
-									name={`products.${index}.productName`}
+									name={`products.${index}.colorName`}
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Product Name</FormLabel>
+											<FormLabel>Color Name</FormLabel>
 											<FormControl>
 												<Input
-													placeholder="Enter product name"
+													placeholder="Enter color name"
+													disabled={isFormSubmitting}
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+
+								<FormField
+									control={form.control}
+									name={`products.${index}.colorCount`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Color Count</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="Enter color count"
 													disabled={isFormSubmitting}
 													{...field}
 												/>

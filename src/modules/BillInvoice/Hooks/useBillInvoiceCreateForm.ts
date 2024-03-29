@@ -2,10 +2,7 @@
 
 import useCustomSWR from "@/hooks/useCustomSWR";
 import { route } from "@/routes/routes";
-import {
-	ProformaInvoiceSchema,
-	ProformaInvoiceSchemaType
-} from "@/validators/ProformaInvoice.schema";
+import { BillInvoiceSchema, BillInvoiceSchemaType } from "@/validators/BillInvoice.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -13,23 +10,22 @@ import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-export default function useProformaInvoiceUpdateForm(id: string) {
+export default function useBillInvoiceCreateForm() {
 	const [openClientForm, setOpenClientForm] = useState(false);
-
-	const apiUrl = route.apiRoute.proformaInvoiceUpdate(id);
 
 	const router = useRouter();
 
-	const form = useForm<ProformaInvoiceSchemaType>({
-		resolver: zodResolver(ProformaInvoiceSchema),
+	const form = useForm<BillInvoiceSchemaType>({
+		resolver: zodResolver(BillInvoiceSchema),
 		defaultValues: {
-			invoiceNumber: "",
-			invoiceDate: new Date(),
+			billNumber: "",
+			billDate: new Date(),
 			client: null,
 			currency: null,
 			products: [
 				{
-					productName: "",
+					colorName: "",
+					colorCount: "",
 					quantity: "",
 					unit: null,
 					unitPrice: ""
@@ -45,17 +41,10 @@ export default function useProformaInvoiceUpdateForm(id: string) {
 	const isFormSubmitting = form.formState.isSubmitting;
 
 	const {
-		data: proformaInvoiceData,
-		isLoading: proformaInvoiceIsLoading,
-		refresh: proformaInvoiceRefresh
-	} = useCustomSWR(apiUrl);
-
-	const {
 		data: clients,
 		isLoading: clientsIsLoading,
 		refresh: clientsRefresh
 	} = useCustomSWR(route.apiRoute.clients);
-
 	const { data: documentData, isLoading: documentIsLoading } = useCustomSWR(
 		route.apiRoute.documentDetails
 	);
@@ -102,33 +91,7 @@ export default function useProformaInvoiceUpdateForm(id: string) {
 		control: form.control
 	});
 
-	useEffect(() => {
-		if (proformaInvoiceData?.data) {
-			const { client, ...rest } = proformaInvoiceData?.data;
-			const modifiedData = {
-				...rest,
-				invoiceDate: new Date(rest.invoiceDate),
-				client: {
-					label: client.clientName,
-					value: client.id
-				},
-				currency: {
-					label: proformaInvoiceData.data.currency,
-					value: proformaInvoiceData.data.currency
-				},
-				products: proformaInvoiceData.data.products.map((product: any) => ({
-					...product,
-					unit: {
-						label: product.unit,
-						value: product.unit
-					}
-				}))
-			};
-			form.reset(modifiedData);
-		}
-	}, [proformaInvoiceData, form]);
-
-	const onSubmit = async (data: ProformaInvoiceSchemaType) => {
+	const onSubmit = async (data: BillInvoiceSchemaType) => {
 		const { client, ...rest } = data;
 		const modifiedData = {
 			...rest,
@@ -143,19 +106,18 @@ export default function useProformaInvoiceUpdateForm(id: string) {
 		};
 
 		await axios
-			.put(apiUrl, modifiedData)
+			.post(route.apiRoute.billInvoice, modifiedData)
 			.then(() => {
 				form.reset();
-				proformaInvoiceRefresh();
-				router.push(route.dashboardRoute.proformaInvoice);
-				toast.success("Proforma Invoice updated successfully");
+				router.push(route.dashboardRoute.billInvoice);
+				toast.success("Bill Invoice created successfully");
 			})
 			.catch(err => {
 				if (err.response.status === 403) {
 					toast.error(err.response.data.message);
 					return;
 				}
-				toast.error("Failed to update Proforma Invoice");
+				toast.error("Failed to create Bill Invoice");
 			});
 	};
 
@@ -175,7 +137,6 @@ export default function useProformaInvoiceUpdateForm(id: string) {
 		remove,
 		clientsIsLoading,
 		clientsRefresh,
-		documentIsLoading,
-		proformaInvoiceIsLoading
+		documentIsLoading
 	};
 }

@@ -9,7 +9,7 @@ const PasswordVisibilityToggle = forwardRef<HTMLInputElement, InputProps>(({ ...
 	return (
 		<div className="relative">
 			<Input type={visible ? "text" : "password"} ref={ref} {...props} />
-			<div className="absolute right-0 top-0 pr-[5px] pt-[10px]">
+			<div className="absolute right-4 top-1/2 -translate-y-1/2">
 				{visible ? (
 					<FaEye className="cursor-pointer" onClick={() => setVisible(!visible)} />
 				) : (

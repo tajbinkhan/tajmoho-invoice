@@ -8,9 +8,9 @@ import {
 	DialogTitle
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import useBillInvoiceCreateForm from "@/modules/BillInvoice/Hooks/useBillInvoiceCreateForm";
+import BillInvoiceForm from "@/modules/BillInvoice/Templates/Form/BillInvoiceForm";
 import { ClientForm } from "@/modules/Clients/Templates/Form/ClientsCreateForm";
-import useProformaInvoiceCreateForm from "@/modules/ProformaInvoice/Hooks/useProformaInvoiceCreateForm";
-import ProformaInvoiceForm from "@/modules/ProformaInvoice/Templates/Form/ProformaInvoiceForm";
 
 export default function BillInvoiceCreateFormTemplateView() {
 	const {
@@ -30,7 +30,7 @@ export default function BillInvoiceCreateFormTemplateView() {
 		clientsIsLoading,
 		clientsRefresh,
 		documentIsLoading
-	} = useProformaInvoiceCreateForm();
+	} = useBillInvoiceCreateForm();
 
 	return (
 		<div className="space-y-6">
@@ -64,7 +64,7 @@ export default function BillInvoiceCreateFormTemplateView() {
 					/>
 				</DialogContent>
 			</Dialog>
-			<ProformaInvoiceForm
+			<BillInvoiceForm
 				form={form}
 				onSubmit={onSubmit}
 				customTotalAmount={customTotalAmount}
@@ -80,8 +80,8 @@ export default function BillInvoiceCreateFormTemplateView() {
 				isFormSubmitting={isFormSubmitting}
 				clientsRefresh={clientsRefresh}
 				setOpenClientForm={setOpenClientForm}
-				text="Create Proforma Invoice"
-				loadingText="Creating Proforma Invoice..."
+				text="Create Bill Invoice"
+				loadingText="Creating Bill Invoice..."
 			/>
 		</div>
 	);
