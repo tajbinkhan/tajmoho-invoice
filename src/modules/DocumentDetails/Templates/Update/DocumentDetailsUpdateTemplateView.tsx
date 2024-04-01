@@ -63,7 +63,7 @@ export default function DocumentDetailsUpdateTemplateView() {
 									<FormControl>
 										<CKEditor
 											editor={ClassicEditor}
-											onChange={(event, editor) => {
+											onChange={(_, editor) => {
 												const data = editor.getData();
 												field.onChange(data);
 											}}
