@@ -1,4 +1,3 @@
-import useAuth from "@/modules/Authentication/Hooks/useAuth";
 import { route } from "@/routes/routes";
 import { PasswordChangeSchema, PasswordChangeSchemaType } from "@/validators/PasswordChange.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 export default function useProfilePasswordUpdateForm() {
-	const { user } = useAuth();
 	const form = useForm<PasswordChangeSchemaType>({
 		resolver: zodResolver(PasswordChangeSchema),
 		defaultValues: {

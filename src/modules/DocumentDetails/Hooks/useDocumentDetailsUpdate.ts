@@ -34,11 +34,11 @@ export default function useDocumentDetailsUpdate() {
 	const postSubmission = async (data: DocumentDetailsSchemaType) => {
 		await axios
 			.post(route.apiRoute.documentDetails, data)
-			.then(res => {
+			.then(() => {
 				toast.success("Document details create successfully");
 				router.push(route.dashboardRoute.documentDetails);
 			})
-			.catch(err => {
+			.catch(() => {
 				toast.error("Failed to create document details");
 			});
 	};
@@ -47,11 +47,11 @@ export default function useDocumentDetailsUpdate() {
 		const apiUrl = `${route.apiRoute.documentDetails}/${id}`;
 		await axios
 			.put(apiUrl, data)
-			.then(res => {
+			.then(() => {
 				toast.success("Document details updated successfully");
 				router.push(route.dashboardRoute.documentDetails);
 			})
-			.catch(err => {
+			.catch(() => {
 				toast.error("Failed to update document details");
 			});
 	};

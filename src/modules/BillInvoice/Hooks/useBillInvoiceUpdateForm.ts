@@ -24,6 +24,7 @@ export default function useBillInvoiceUpdateForm(id: string) {
 			billDate: new Date(),
 			client: null,
 			currency: null,
+			description: "",
 			products: [
 				{
 					colorName: "",

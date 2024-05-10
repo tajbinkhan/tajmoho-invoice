@@ -10,7 +10,7 @@ import { useState } from "react";
 interface DatePickerProps {
 	field: {
 		value: Date;
-		onChange: (date: Date) => void;
+		onChange: React.Dispatch<React.SetStateAction<Date>>;
 	};
 }
 
